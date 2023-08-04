@@ -1,5 +1,3 @@
-import pygame
-
 # Game Size
 COLUMNS = 10
 ROWS = 20
