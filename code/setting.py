@@ -1,4 +1,5 @@
 import pygame
+
 # Game Size
 COLUMNS = 10
 ROWS = 20
@@ -15,11 +16,11 @@ PADDING = 20
 WINDOW_WIDTH = GAME_WIDTH + SIDEBAR_WIDTH + PADDING * 3
 WINDOW_HEIGHT = GAME_HEIGHT + PADDING * 2
 
-# game behaviour 
+# game behaviour
 UPDATE_START_SPEED = 600
 MOVE_WAIT_TIME = 200
 ROTATE_WAIT_TIME = 200
-BLOCK_OFFSET = pygame.Vector2(COLUMNS // 2, 5)
+BLOCK_OFFSET = pygame.Vector2(COLUMNS // 2, -1)
 
 # Colors
 YELLOW = "#f1e60d"
