@@ -42,6 +42,7 @@ class Game:
 
     def create_new_tetromino(self):
 
+        self.check_finished_row()
         self.tetromino = Tetromino(
             choice(TETROMINOS_LETTER_LIST),
             self.sprites,
@@ -78,6 +79,31 @@ class Game:
             )
 
         self.surface.blit(self.line_surface, (0, 0))
+
+    def check_finished_row(self):
+
+        # Get full row index
+        delete_rows = []
+        for i, row in enumerate(self.field_data):
+            if all(row):
+                delete_rows.append(i)
+
+        if delete_rows:
+            for delete_row in delete_rows:
+                # Delete full row
+                for block in self.field_data[delete_row]:
+                    block.kill()
+                # Move down block
+                for row in self.field_data:
+                    for block in row:
+                        if block and block.pos.y < delete_row:
+                            block.pos.y += 1
+            # Rebuild field data
+            self.field_data = [
+                [0 for x in range(setting.COLUMNS)] for y in range(setting.ROWS)
+            ]
+            for block in self.sprites:
+                self.field_data[int(block.pos.y)][int(block.pos.x)] = block
 
     def input(self):
         keys = pygame.key.get_pressed()
