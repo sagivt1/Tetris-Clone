@@ -8,12 +8,15 @@ TETROMINOS_LETTER_LIST = list(setting.TETROMINOS.keys())
 
 
 class Game:
-    def __init__(self):
+    def __init__(self, get_next_shape):
         # Setup
         self.surface = pygame.Surface((setting.GAME_WIDTH, setting.GAME_HEIGHT))
         self.display_surface = pygame.display.get_surface()
         self.rect = self.surface.get_rect(topleft=(setting.PADDING, setting.PADDING))
         self.sprites = pygame.sprite.Group()
+
+        # Game connection
+        self.get_next_shape = get_next_shape
 
         # Lines surface
         self.line_surface = pygame.Surface((setting.GAME_WIDTH, setting.GAME_HEIGHT))
@@ -45,7 +48,7 @@ class Game:
 
         self.check_finished_row()
         self.tetromino = Tetromino(
-            choice(TETROMINOS_LETTER_LIST),
+            self.get_next_shape(),
             self.sprites,
             self.create_new_tetromino,
             self.field_data,

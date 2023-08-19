@@ -7,6 +7,10 @@ from game import Game
 from score import Score
 from preview import Preview
 
+from random import choice
+
+TETROMINOS_LETTER_LIST = list(setting.TETROMINOS.keys())
+
 class Main:
     def __init__(self):
 
@@ -16,11 +20,20 @@ class Main:
         self.clock = pygame.time.Clock()
         pygame.display.set_caption("Tetris")
 
+        # Shapes
+        self.next_shapes = [choice(TETROMINOS_LETTER_LIST) for shape in range(3)]
+        print(self.next_shapes)
+
         # Components
-        self.game = Game()
+        self.game = Game(self.get_next_shape)
         self.score = Score()
         self.preview = Preview()
         
+
+    def get_next_shape(self):
+        next_shape = self.next_shapes.pop(0)
+        self.next_shapes.append(choice(TETROMINOS_LETTER_LIST))
+        return next_shape
 
     def run(self):
         while True:
@@ -35,7 +48,7 @@ class Main:
             # Components Run
             self.game.run()
             self.score.run()
-            self.preview.run()
+            self.preview.run(self.next_shapes)
 
             # Updating The Game => Tick
             pygame.display.update()
