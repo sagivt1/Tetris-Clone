@@ -11,12 +11,15 @@ from random import choice
 
 TETROMINOS_LETTER_LIST = list(setting.TETROMINOS.keys())
 
+
 class Main:
     def __init__(self):
 
         # General Setup
         pygame.init()
-        self.display_surface = pygame.display.set_mode((setting.WINDOW_WIDTH, setting.WINDOW_HEIGHT))
+        self.display_surface = pygame.display.set_mode(
+            (setting.WINDOW_WIDTH, setting.WINDOW_HEIGHT)
+        )
         self.clock = pygame.time.Clock()
         pygame.display.set_caption("Tetris")
 
@@ -25,10 +28,14 @@ class Main:
         print(self.next_shapes)
 
         # Components
-        self.game = Game(self.get_next_shape)
+        self.game = Game(self.get_next_shape, self.update_score)
         self.score = Score()
         self.preview = Preview()
-        
+
+    def update_score(self, lines, score, level):
+        self.score.lines = lines
+        self.score.score = score
+        self.level = level
 
     def get_next_shape(self):
         next_shape = self.next_shapes.pop(0)

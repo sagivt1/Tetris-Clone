@@ -8,7 +8,7 @@ TETROMINOS_LETTER_LIST = list(setting.TETROMINOS.keys())
 
 
 class Game:
-    def __init__(self, get_next_shape):
+    def __init__(self, get_next_shape, update_score):
         # Setup
         self.surface = pygame.Surface((setting.GAME_WIDTH, setting.GAME_HEIGHT))
         self.display_surface = pygame.display.get_surface()
@@ -17,6 +17,7 @@ class Game:
 
         # Game connection
         self.get_next_shape = get_next_shape
+        self.update_score = update_score
 
         # Lines surface
         self.line_surface = pygame.Surface((setting.GAME_WIDTH, setting.GAME_HEIGHT))
@@ -46,6 +47,21 @@ class Game:
         }
 
         self.timers["vertical move"].activate()
+
+        # Score
+        self.current_level = 1
+        self.current_score = 0
+        self.current_lines = 0
+
+    def calculate_score(self, num_lines):
+        self.current_lines + num_lines
+        num_lines = min(num_lines, 4)
+        self.current_score += setting.SCORE_DATA[num_lines] * self.current_level
+
+        if self.current_lines / 10 > self.current_level:
+            self.current_level += 1
+
+        self.update_score(self.current_lines, self.current_score, self.current_level)
 
     def create_new_tetromino(self):
 
@@ -111,6 +127,9 @@ class Game:
             ]
             for block in self.sprites:
                 self.field_data[int(block.pos.y)][int(block.pos.x)] = block
+
+            # Update score
+            self.calculate_score(len(delete_rows))
 
     def input(self):
         keys = pygame.key.get_pressed()
