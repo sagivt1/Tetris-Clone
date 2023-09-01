@@ -35,7 +35,7 @@ class Main:
     def update_score(self, lines, score, level):
         self.score.lines = lines
         self.score.score = score
-        self.level = level
+        self.score.level = level
 
     def get_next_shape(self):
         next_shape = self.next_shapes.pop(0)
