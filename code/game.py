@@ -1,6 +1,8 @@
 from pygame.sprite import Group
 from random import choice
 from timer import Timer
+from sys import exit
+from os.path import join
 import setting
 import pygame
 
@@ -53,6 +55,8 @@ class Game:
         self.current_score = 0
         self.current_lines = 0
 
+       
+
     def calculate_score(self, num_lines):
         self.current_lines += num_lines
         num_lines = min(num_lines, 4)
@@ -66,8 +70,13 @@ class Game:
 
         self.update_score(self.current_lines, self.current_score, self.current_level)
 
-    def create_new_tetromino(self):
+    def check_game_over(self):
+        for block in self.tetromino.blocks:
+            if block.pos.y < 0:
+                exit()
 
+    def create_new_tetromino(self):
+        self.check_game_over()
         self.check_finished_row()
         self.tetromino = Tetromino(
             self.get_next_shape(),
@@ -190,6 +199,10 @@ class Tetromino:
         # Block Creation
         self.blocks = [Block(group, pos, self.color) for pos in self.block_positions]
 
+        # Sound
+        self.landing_sound = pygame.mixer.Sound(join('sound','landing.wav'))
+        self.landing_sound.set_volume(0.05)
+
     # Collisions
     def next_move_horizontal_collide(self, blocks, amount):
         collision_list = [
@@ -218,6 +231,7 @@ class Tetromino:
         else:
             for block in self.blocks:
                 self.field_data[int(block.pos.y)][int(block.pos.x)] = block
+            self.landing_sound.play()
             self.create_new_tetromino()
 
     # Rotate

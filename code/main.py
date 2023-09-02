@@ -6,7 +6,7 @@ from sys import exit
 from game import Game
 from score import Score
 from preview import Preview
-
+from os.path import join
 from random import choice
 
 TETROMINOS_LETTER_LIST = list(setting.TETROMINOS.keys())
@@ -25,12 +25,17 @@ class Main:
 
         # Shapes
         self.next_shapes = [choice(TETROMINOS_LETTER_LIST) for shape in range(3)]
-        print(self.next_shapes)
 
         # Components
         self.game = Game(self.get_next_shape, self.update_score)
         self.score = Score()
         self.preview = Preview()
+
+        # Audio
+        self.music = pygame.mixer.Sound(join('sound','music.wav'))
+        self.music.set_volume(0.05)
+        self.music.play(-1)
+        
 
     def update_score(self, lines, score, level):
         self.score.lines = lines
